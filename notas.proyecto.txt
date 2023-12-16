@@ -1,0 +1,16 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    notas.proyecto.txt                                 :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: polmarti <polmarti@student.42barcel>       +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2023/12/11 13:44:03 by polmarti          #+#    #+#              #
+#    Updated: 2023/12/11 13:44:07 by polmarti         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+
+para poder compilar el proyectyo debes primero hacer make de la minilibx y despues incluir las flags
+
+minilibx_opengl_20191021/libmlx.a -framework OpenGL -framework AppKit  
