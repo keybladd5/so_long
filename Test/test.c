@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minilibx_opengl_20191021/mlx.h"
+#include "../minilibx_opengl_20191021/mlx.h"
 #include <stdlib.h>
 
 #define MALLOC_ERROR 1
@@ -53,7 +53,7 @@ int	main(void)
 		return (MALLOC_ERROR);
 	}
 
-	img.img = mlx_xpm_file_to_image(mlx_connection, "assets/tile_0000.xpm", &img.bits_per_pixel, &img.line_length);
+	/*img.img = mlx_xpm_file_to_image(mlx_connection, "assets/tile_0000.xpm", &img.bits_per_pixel, &img.line_length);
 	img2.img = mlx_xpm_file_to_image(mlx_connection, "assets/tile_0037.xpm", &img.bits_per_pixel, &img.line_length);
 	while(y < 799)
 	{
@@ -67,13 +67,12 @@ int	main(void)
 			x += 16;
 		}
 		y += 16;
-	}
+	}*/
 
 	//mlx_put_image_to_window(mlx_connection, mlx_win, img.img, , 0);
-	/*img.img = mlx_new_image(mlx_connection, WIDTH, HEIGHT);
+	/*img.img = mlx_new_image(mlx_connection, WIDTH, HEIGHT);*/
 
 	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length, &img.endian);
-
 
 
 	while(y != 50)
@@ -99,7 +98,7 @@ int	main(void)
 		my_mlx_pixel_put(&img, x, y, 0x33B1FF99);
 		y++;
 	}
-*/
+
 
 	mlx_loop(mlx_connection);// mantiene en bucle para los eventos
 

@@ -9,14 +9,11 @@
 /*   Updated: 2023/12/14 11:55:34 by polmarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "minilibx_opengl_20191021/mlx.h"
+#include "../minilibx_opengl_20191021/mlx.h"
 #include <stdlib.h>
 #include <stdio.h>
 
 #define MALLOC_ERROR 1
-#define WIDTH 800
-#define HEIGHT 800
-#define SIZE_XPM 16
 
 typedef struct	s_img {
 	void	*img;
@@ -27,10 +24,37 @@ typedef struct	s_img {
 typedef struct	s_data {
 	void	*mlx_connection;
 	void	*mlx_win;
+	int 	y_;
+	int		x_;
+	void	*img;
+	void	*img2;
+	void	*img3;
+	void	*img4;
+	char 	**map_tru;
+	int 	coins;
 }				t_data;
 
+typedef struct	s_point {
+	int y_;
+	int x_;
+}				t_point;
 
-void ft_make_map(t_data data, t_img img, t_img img2, t_img img3, char** map)
+char** make_area(char** zone, t_point size)
+{
+	char** new;
+
+	new = malloc(sizeof(char*) * size.y_);
+	for (int i = 0; i < size.y_; ++i)
+	{
+		new[i] = malloc(size.x_ + 1);
+		for (int j = 0; j < size.x_; ++j)
+			new[i][j] = zone[i][j];
+		new[i][size.x_] = '\0';
+	}
+	return new;
+}
+
+void ft_make_map(t_data *data, char** map)
 {
 	int y;
 	int x;
@@ -46,11 +70,21 @@ void ft_make_map(t_data data, t_img img, t_img img2, t_img img3, char** map)
 		while(x < 16)
 		{
 			if (map[y][x] == '1')
-				mlx_put_image_to_window(data.mlx_connection, data.mlx_win, img.img, width, height);
+				mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img, width, height);
 			else if (map[y][x] == '0')
-				mlx_put_image_to_window(data.mlx_connection, data.mlx_win, img2.img, width, height);
+				mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img2, width, height);
+			else if (map[y][x] == 'C')
+			{
+				mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img2, width, height);
+				mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img3, width, height);
+			}
 			else if (map[y][x] == 'P')
-				mlx_put_image_to_window(data.mlx_connection, data.mlx_win, img3.img, width, height);
+			{
+				mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img2, width, height);
+				mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img4, width, height);
+				data->y_ = y;
+				data->x_ = x;
+			}
 			x++;
 			width += 16;
 		}
@@ -59,25 +93,127 @@ void ft_make_map(t_data data, t_img img, t_img img2, t_img img3, char** map)
 	}
 }
 
+int	key_hook(int keycode, t_data *data, t_point *curr)
+{
+	static int movements = 1;
+	printf("%d movements\n", movements);
+
+	if (keycode == 53)
+	{
+		mlx_destroy_window(data->mlx_connection, data->mlx_win);
+		free(data->mlx_connection);
+		exit (0);
+	}
+	else if (keycode == 126) //arriba
+	{	
+		if (data->map_tru[data->y_ - 1][data->x_] == 'C')
+		{	
+			data->coins++;
+			movements++;
+			data->map_tru[data->y_][data->x_] = '0';
+			data->y_ -= 1; 
+			data->map_tru[data->y_][data->x_] = 'P';
+			ft_make_map(data, data->map_tru);
+		}
+		else if (data->map_tru[data->y_ - 1][data->x_] != '0')
+			return (0);
+		else
+		{
+			movements++;
+			data->map_tru[data->y_][data->x_] = '0';
+			data->y_ -= 1; 
+			data->map_tru[data->y_][data->x_] = 'P';
+			ft_make_map(data, data->map_tru);
+		}
+	}
+	else if (keycode == 123) //izquierda
+	{
+		if (data->map_tru[data->y_][data->x_ - 1] == 'C')
+		{
+			movements++;
+			data->map_tru[data->y_][data->x_] = '0';
+			data->x_ -= 1; 
+			data->map_tru[data->y_][data->x_] = 'P';
+			ft_make_map(data, data->map_tru);
+		}
+		else if (data->map_tru[data->y_][data->x_ - 1] != '0')
+			return (0);
+		else
+		{
+			movements++;
+			data->map_tru[data->y_][data->x_] = '0';
+			data->x_ -= 1; 
+			data->map_tru[data->y_][data->x_] = 'P';
+			ft_make_map(data, data->map_tru);
+		}
+	}
+	else if (keycode == 125) //abajo
+	{
+		if (data->map_tru[data->y_ + 1][data->x_] == 'C')
+		{
+			movements++;
+			data->coins++;
+			data->map_tru[data->y_][data->x_] = '0';
+			data->y_ += 1; 
+			data->map_tru[data->y_][data->x_] = 'P';
+			ft_make_map(data, data->map_tru);
+		}
+		else if (data->map_tru[data->y_ + 1][data->x_] != '0')
+			return (0);
+		else
+		{
+			movements++;
+			data->map_tru[data->y_][data->x_] = '0';
+			data->y_ += 1; 
+			data->map_tru[data->y_][data->x_] = 'P';
+			ft_make_map(data, data->map_tru);
+		}
+	}
+	else if (keycode == 124) //derecha
+	{
+		if (data->map_tru[data->y_][data->x_ + 1] == 'C')
+		{
+			movements++;
+			data->map_tru[data->y_][data->x_] = '0';
+			data->x_ += 1;  
+			data->map_tru[data->y_][data->x_] = 'P';
+			ft_make_map(data, data->map_tru);
+		}
+		else if (data->map_tru[data->y_][data->x_ + 1] != '0')
+			return (0);
+		else
+		{
+			movements++;
+			data->map_tru[data->y_][data->x_] = '0';
+			data->x_ += 1;  
+			data->map_tru[data->y_][data->x_] = 'P';
+			ft_make_map(data, data->map_tru);
+		}
+	}
+	return (0);
+}
 int	main(void)
 {
 	t_data	data;
-	t_img	img;
-	t_img	img2;
-	t_img	img3;
+	t_data	*data2;
+	int		bits_per_pixel;
+	int		line_length;
 	int x = 0;
 	int y = 0;
+	t_point size;
 	char *map[] = {
         "111111111111111",
-        "100000000000001",
+        "1000000C000C001",
         "1000000P0000001",
-        "100000000000001",
-        "100000000000001",
-        "100000000000001",
-        "100000000000001",
+        "1000000C0000001",
+        "10000C000000001",
+        "1000000000C0001",
+        "10000C000000001",
         "111111111111111",
     };
-	char **map_true;
+
+	size.y_ = 8;
+	size.x_ = 16;
 
 	data.mlx_connection = mlx_init();//inicia la conexion con XWINDOW y hace malloc
 	if(!data.mlx_connection)
@@ -89,12 +225,14 @@ int	main(void)
 		return (MALLOC_ERROR);
 	}
 
-	img.img = mlx_xpm_file_to_image(data.mlx_connection, "assets/tile_0000.xpm", &img.bits_per_pixel, &img.line_length); //carga imagen 1
-	img2.img = mlx_xpm_file_to_image(data.mlx_connection, "assets/tile_0037.xpm", &img.bits_per_pixel, &img.line_length); //carga imagen 2
-	img3.img = mlx_xpm_file_to_image(data.mlx_connection, "assets/tile_0053.xpm", &img.bits_per_pixel, &img.line_length); //carga imagen 3
-	ft_make_map(data, img, img2, img3, map);
+	data.img = mlx_xpm_file_to_image(data.mlx_connection, "assets/tile_0000.xpm", &bits_per_pixel, &line_length); //carga imagen 1
+	data.img2 = mlx_xpm_file_to_image(data.mlx_connection, "assets/tile_0037.xpm", &bits_per_pixel, &line_length); //carga imagen 2
+	data.img3 = mlx_xpm_file_to_image(data.mlx_connection, "assets/tile_0053.xpm", &bits_per_pixel, &line_length); //carga imagen 3
+	data.img4 = mlx_xpm_file_to_image(data.mlx_connection, "assets/tile_0121.xpm", &bits_per_pixel, &line_length); //carga imagen 3
+	data.map_tru = make_area(map, size);
+	ft_make_map(&data, data.map_tru);
 
-	mlx_key_hook(data.mlx_connection, )
+	mlx_key_hook(data.mlx_win, key_hook, &data);
 	mlx_loop(data.mlx_connection);// mantiene en bucle para los eventos
 
 	mlx_destroy_window(data.mlx_connection, data.mlx_win);

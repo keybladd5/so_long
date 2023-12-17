@@ -14,3 +14,4 @@
 para poder compilar el proyectyo debes primero hacer make de la minilibx y despues incluir las flags
 
 minilibx_opengl_20191021/libmlx.a -framework OpenGL -framework AppKit  
+
