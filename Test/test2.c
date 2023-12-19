@@ -9,17 +9,11 @@
 /*   Updated: 2023/12/14 11:55:34 by polmarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "../minilibx_opengl_20191021/mlx.h"
-#include <stdlib.h>
-#include <stdio.h>
+//#include "../minilibx_opengl_20191021/mlx.h"
+//#include <stdlib.h>
+//#include <stdio.h>
 
 #define MALLOC_ERROR 1
-
-typedef struct	s_img {
-	void	*img;
-	int		bits_per_pixel;
-	int		line_length;
-}				t_img;
 
 typedef struct	s_data {
 	void	*mlx_connection;
@@ -35,25 +29,38 @@ typedef struct	s_data {
 }				t_data;
 
 typedef struct	s_point {
-	int y_;
-	int x_;
+	int line;
+	int size_line;
 }				t_point;
-
-char** make_area(char** zone, t_point size)
+//Get the map 
+char** ft_make_area(char** zone, t_point size)
 {
 	char** new;
-
-	new = malloc(sizeof(char*) * size.y_);
-	for (int i = 0; i < size.y_; ++i)
+	int i;
+	int j;
+	
+	i = 0;
+	j = 0;
+	new = malloc(sizeof(char*) * size.line);
+	if (!new)
+		return (0); // hay que proteger aún
+	while (i < size.line)
 	{
-		new[i] = malloc(size.x_ + 1);
-		for (int j = 0; j < size.x_; ++j)
+		new[i] = malloc(size.size_line + 1);
+		if(!new[i])
+			return (0);// hay que proteger aún
+		while (j < size.size_line)
+		{
 			new[i][j] = zone[i][j];
-		new[i][size.x_] = '\0';
+			j++;
+		}
+		new[i][size.size_line] = '\0';
+		i++;
 	}
-	return new;
+	new[i] = NULL;
+	return (new);
 }
-
+//Re-Write the grafics
 void ft_make_map(t_data *data, char** map)
 {
 	int y;
@@ -70,18 +77,18 @@ void ft_make_map(t_data *data, char** map)
 		while(x < 16)
 		{
 			if (map[y][x] == '1')
-				mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img, width, height);
+				mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img, width * 4, height * 4);
 			else if (map[y][x] == '0')
-				mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img2, width, height);
+				mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img2, width * 4, height * 4);
 			else if (map[y][x] == 'C')
 			{
-				mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img2, width, height);
-				mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img3, width, height);
+				mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img2, width * 4, height * 4);
+				mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img3, width * 4, height * 4);
 			}
 			else if (map[y][x] == 'P')
 			{
-				mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img2, width, height);
-				mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img4, width, height);
+				mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img2, width * 4, height * 4);
+				mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img4, width * 4, height * 4);
 				data->y_ = y;
 				data->x_ = x;
 			}
@@ -92,7 +99,7 @@ void ft_make_map(t_data *data, char** map)
 		height += 16;
 	}
 }
-
+//Movements
 int	key_hook(int keycode, t_data *data, t_point *curr)
 {
 	static int movements = 1;
@@ -107,88 +114,50 @@ int	key_hook(int keycode, t_data *data, t_point *curr)
 	else if (keycode == 126) //arriba
 	{	
 		if (data->map_tru[data->y_ - 1][data->x_] == 'C')
-		{	
 			data->coins++;
-			movements++;
-			data->map_tru[data->y_][data->x_] = '0';
-			data->y_ -= 1; 
-			data->map_tru[data->y_][data->x_] = 'P';
-			ft_make_map(data, data->map_tru);
-		}
 		else if (data->map_tru[data->y_ - 1][data->x_] != '0')
 			return (0);
-		else
-		{
-			movements++;
-			data->map_tru[data->y_][data->x_] = '0';
-			data->y_ -= 1; 
-			data->map_tru[data->y_][data->x_] = 'P';
-			ft_make_map(data, data->map_tru);
-		}
+		movements++;
+		data->map_tru[data->y_][data->x_] = '0';
+		data->y_ -= 1; 
+		data->map_tru[data->y_][data->x_] = 'P';
+		ft_make_map(data, data->map_tru);
 	}
 	else if (keycode == 123) //izquierda
 	{
 		if (data->map_tru[data->y_][data->x_ - 1] == 'C')
-		{
-			movements++;
-			data->map_tru[data->y_][data->x_] = '0';
-			data->x_ -= 1; 
-			data->map_tru[data->y_][data->x_] = 'P';
-			ft_make_map(data, data->map_tru);
-		}
+			data->coins++;
 		else if (data->map_tru[data->y_][data->x_ - 1] != '0')
 			return (0);
-		else
-		{
-			movements++;
-			data->map_tru[data->y_][data->x_] = '0';
-			data->x_ -= 1; 
-			data->map_tru[data->y_][data->x_] = 'P';
-			ft_make_map(data, data->map_tru);
-		}
+		movements++;
+		data->map_tru[data->y_][data->x_] = '0';
+		data->x_ -= 1; 
+		data->map_tru[data->y_][data->x_] = 'P';
+		ft_make_map(data, data->map_tru);
 	}
 	else if (keycode == 125) //abajo
 	{
 		if (data->map_tru[data->y_ + 1][data->x_] == 'C')
-		{
-			movements++;
 			data->coins++;
-			data->map_tru[data->y_][data->x_] = '0';
-			data->y_ += 1; 
-			data->map_tru[data->y_][data->x_] = 'P';
-			ft_make_map(data, data->map_tru);
-		}
 		else if (data->map_tru[data->y_ + 1][data->x_] != '0')
 			return (0);
-		else
-		{
-			movements++;
-			data->map_tru[data->y_][data->x_] = '0';
-			data->y_ += 1; 
-			data->map_tru[data->y_][data->x_] = 'P';
-			ft_make_map(data, data->map_tru);
-		}
+		movements++;
+		data->map_tru[data->y_][data->x_] = '0';
+		data->y_ += 1; 
+		data->map_tru[data->y_][data->x_] = 'P';
+		ft_make_map(data, data->map_tru);
 	}
 	else if (keycode == 124) //derecha
 	{
 		if (data->map_tru[data->y_][data->x_ + 1] == 'C')
-		{
-			movements++;
-			data->map_tru[data->y_][data->x_] = '0';
-			data->x_ += 1;  
-			data->map_tru[data->y_][data->x_] = 'P';
-			ft_make_map(data, data->map_tru);
-		}
+			data->coins++;
 		else if (data->map_tru[data->y_][data->x_ + 1] != '0')
 			return (0);
-		else
-		{
-			movements++;
-			data->map_tru[data->y_][data->x_] = '0';
-			data->x_ += 1;  
-			data->map_tru[data->y_][data->x_] = 'P';
-			ft_make_map(data, data->map_tru);
-		}
+		movements++;
+		data->map_tru[data->y_][data->x_] = '0';
+		data->x_ += 1;  
+		data->map_tru[data->y_][data->x_] = 'P';
+		ft_make_map(data, data->map_tru);
 	}
 	return (0);
 }
@@ -212,13 +181,13 @@ int	main(void)
         "111111111111111",
     };
 
-	size.y_ = 8;
-	size.x_ = 16;
+	size.line = 8;
+	size.size_line = 16;
 
 	data.mlx_connection = mlx_init();//inicia la conexion con XWINDOW y hace malloc
 	if(!data.mlx_connection)
 		return (MALLOC_ERROR);
-	data.mlx_win = mlx_new_window(data.mlx_connection, (15 * 16), 8 * 16, "TEST");// abre la ventana y hace malloc
+	data.mlx_win = mlx_new_window(data.mlx_connection, (15 * 64), 8 * 64, "TEST");// abre la ventana y hace malloc
 	if (!data.mlx_win)
 	{
 		free(data.mlx_connection);

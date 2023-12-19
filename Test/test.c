@@ -10,13 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minilibx_opengl_20191021/mlx.h"
-#include <stdlib.h>
+//#include "../minilibx_opengl_20191021/mlx.h"
+//#include <stdlib.h>
 
-#define MALLOC_ERROR 1
-#define WIDTH 800
-#define HEIGHT 800
-#define SIZE_XPM 16
+//#define MALLOC_ERROR 1
+//#define WIDTH 800
+//#define HEIGHT 800
+//#define SIZE_XPM 16
 
 typedef struct	s_data {
 	void	*img;
