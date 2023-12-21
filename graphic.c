@@ -13,6 +13,30 @@
 #include "inc/so_long.h"
 #include "gnl/get_next_line.h"
 
+void	ft_draw(t_data *data, int x, int y, int width, int height)
+{
+	if (data->map[y][x] == '1')
+		mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img, width, height);
+	else if (data->map[y][x] == '0')
+		mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img2, width, height);
+	else if (data->map[y][x] == 'C')
+	{
+		mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img2, width, height);
+		mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img3, width, height);
+	}
+	else if (data->map[y][x] == 'P')
+	{
+		mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img2, width , height);
+		mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img4, width , height);
+		data->x_npc = x;
+		data->y_npc = y;
+	}
+	else if (data->map[y][x] == 'E')
+	{
+		mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img2, width, height);
+		mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img5, width, height);
+	}
+}
 void ft_make_map(t_data *data, char** map)
 {
 	int y;
@@ -28,27 +52,7 @@ void ft_make_map(t_data *data, char** map)
 		width = 0;
 		while(x < data->x_)
 		{
-			if (map[y][x] == '1')
-				mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img, width, height);
-			else if (map[y][x] == '0')
-				mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img2, width, height);
-			else if (map[y][x] == 'C')
-			{
-				mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img2, width, height);
-				mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img3, width, height);
-			}
-			else if (map[y][x] == 'P')
-			{
-				mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img2, width , height);
-				mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img4, width , height);
-				data->x_npc = x;
-				data->y_npc = y;
-			}
-			else if (map[y][x] == 'E')
-			{
-				mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img2, width, height);
-				mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img5, width, height);
-			}
+			ft_draw(data, x, y, width, height);
 			x++;
 			width += 32;
 		}
