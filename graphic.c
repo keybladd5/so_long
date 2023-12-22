@@ -33,6 +33,7 @@ void	ft_draw(t_data *data, int x, int y, int width, int height)
 	}
 	else if (data->map[y][x] == 'E')
 	{
+		if (data->coins == data->read_coins)
 		mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img2, width, height);
 		mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img5, width, height);
 	}
@@ -65,14 +66,14 @@ int	key_hook(int keycode, t_data *data)
 {
 	static int movements = 1;
 	printf("%d movements\n", movements); //cambiar por mi printf
-
+	printf("%d \n", keycode);
 	if (keycode == 53)
 	{
 		mlx_destroy_window(data->mlx_connection, data->mlx_win);
 		free(data->mlx_connection);
 		exit (0);
 	}
-	else if (keycode == 126) //arriba
+	else if (keycode == 126 || keycode == 13 ) //arriba
 	{	
 		if (data->map[data->y_npc - 1][data->x_npc] == 'C')
 			data->coins++;

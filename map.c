@@ -13,23 +13,6 @@
 #include "inc/so_long.h"
 #include "gnl/get_next_line.h"
 
-//Checkea que la extension sea ber y nada mas
-int ft_check_ext(char *argv[])
-{
-	int i;
-	int size;
-
-	i = 0;
-	size = 0;
-	while(argv[1][size])
-		size++;
-	while(size - i != 3)
-		i++;
-	if (argv[1][i] == 'b' && argv[1][i + 1] == 'e' && argv[1][i + 2] == 'r' \
-		&& argv[1][i +3] == '\0')
-		return(1);
-	return (0);
-}
 //Obtiene el tamaño de la matriz leida en el .ber
 void ft_get_size_map(int fd, t_data *data)
 {
@@ -69,7 +52,7 @@ char** ft_make_area(t_data *data, int fd)
 	data->map[i] = NULL;
 	return (data->map);
 }
-
+//hace la matriz para la ventana
 void	ft_map(char *argv[], t_data *data)
 {
 	int	fd;
@@ -77,15 +60,16 @@ void	ft_map(char *argv[], t_data *data)
 
 	h = 0;
 	fd = 0;
-	if (ft_check_ext(argv) == 0)
+	/*if (ft_check_ext(argv) == 0)
 	{
 		printf("ERROR");
 		return ; //pending put error ft!!
-	}
+	}*/
 	fd = open(argv[1], O_RDONLY);
 	ft_get_size_map(fd, data);
 	close(fd);
 	fd = open(argv[1], O_RDONLY);
 	data->map = ft_make_area(data, fd);
 	close(fd);
+	
 }

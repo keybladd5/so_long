@@ -39,12 +39,24 @@ typedef struct	s_data {
 	int 	y_;
 	int		x_;
 	int 	coins;
+	int 	read_coins;
+	int		flood_fill_check;
 }				t_data;
 
 
 char	*get_next_line(int fd);
 
 int 	ft_check_ext(char *argv[]);
+
+int		ft_check_matrix(t_data *data);
+
+void	ft_flood_fill(t_data *data);
+
+void	ft_fill(t_data *data, int x, int y, int x_npc, int y_npc);
+
+void 	ft_get_npc_yx(t_data *data);
+
+int		ft_get_doubles(t_data *data);
 
 void 	ft_get_size_map(int fd, t_data *data);
 
