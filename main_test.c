@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
 	data.x_ = 0;
 	ft_map(argv, &data);
 	printf("%d\n", ft_get_doubles(&data));
-	ft_get_npc_yx(&data);
+	ft_get_npc_yx_coins(&data);
 	ft_flood_fill(&data);
 	printf("al salir del floodfill %d\n", data.flood_fill_check);
 	printf("%d\n", ft_check_matrix(&data));

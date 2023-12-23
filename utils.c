@@ -57,7 +57,7 @@ int ft_get_doubles(t_data *data)
 		return (1);
 	return (0);
 }
-void ft_get_npc_yx(t_data *data)
+void ft_get_npc_yx_coins(t_data *data)
 {
 	int i;
 	int lines;
@@ -72,8 +72,9 @@ void ft_get_npc_yx(t_data *data)
 			{
 				data->x_npc = i;
 				data->y_npc = lines;
-				return ;
 			}
+			else if(data->map[lines][i] == 'C')
+				data->read_coins++;
 			i++;
 		}
 		lines++;
@@ -117,17 +118,17 @@ void	ft_fill(t_data *data, int x, int y, int x_npc, int y_npc)
 		|| data->map[y_npc][x_npc] != '0' && data->map[y_npc][x_npc] != 'C' && data->map[y_npc][x_npc] != 'P' \
 		&& data->map[y_npc][x_npc] != 'E')	
 			return ;
-	else if (data->map[y_npc][x_npc] == 'E')
-	{
-		data->flood_fill_check = 1;
-		printf("despues del check del floodfill %d\n", data->flood_fill_check);
-	}
 	if (data->map[y_npc][x_npc] == '0')
 		data->map[y_npc][x_npc] = 'o';
 	else if (data->map[y_npc][x_npc] == 'C')
 		data->map[y_npc][x_npc] = 'c';
 	else if (data->map[y_npc][x_npc] == 'P')
 		data->map[y_npc][x_npc] = 'p';
+	else if (data->map[y_npc][x_npc] == 'E')
+	{
+		data->flood_fill_check = 1;
+		printf("despues del check del floodfill %d\n", data->flood_fill_check);
+	}
 	ft_fill(data, x, y, x_npc - 1, y_npc);
 	ft_fill(data, x, y, x_npc + 1, y_npc);
 	ft_fill(data, x, y, x_npc, y_npc - 1);

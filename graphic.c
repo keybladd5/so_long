@@ -17,25 +17,23 @@ void	ft_draw(t_data *data, int x, int y, int width, int height)
 {
 	if (data->map[y][x] == '1')
 		mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img, width, height);
-	else if (data->map[y][x] == '0')
+	else if (data->map[y][x] == 'o')
 		mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img2, width, height);
-	else if (data->map[y][x] == 'C')
+	else if (data->map[y][x] == 'c')
 	{
 		mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img2, width, height);
 		mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img3, width, height);
 	}
-	else if (data->map[y][x] == 'P')
+	else if (data->map[y][x] == 'p' || data->map[y][x] == 'e')
 	{
 		mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img2, width , height);
 		mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img4, width , height);
-		data->x_npc = x;
-		data->y_npc = y;
 	}
 	else if (data->map[y][x] == 'E')
 	{
-		if (data->coins == data->read_coins)
 		mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img2, width, height);
-		mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img5, width, height);
+		if (data->coins == data->read_coins)
+			mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img5, width, height);
 	}
 }
 void ft_make_map(t_data *data, char** map)
@@ -53,6 +51,8 @@ void ft_make_map(t_data *data, char** map)
 		width = 0;
 		while(x < data->x_)
 		{
+			if (data->map[y][x] == '0')
+				data->map[y][x] = 'o';
 			ft_draw(data, x, y, width, height);
 			x++;
 			width += 32;
@@ -60,90 +60,25 @@ void ft_make_map(t_data *data, char** map)
 		y++;
 		height += 32;
 	}
+	for (int i = 0; i < data->y_; ++i)
+		printf("%s\n", data->map[i]);
 }
 //detecta el input del teclado, modifica la matriz y vuelve a llamar a la funcion para hacer el mapa
 int	key_hook(int keycode, t_data *data)
 {
 	static int movements = 1;
 	printf("%d movements\n", movements); //cambiar por mi printf
-	printf("%d \n", keycode);
 	if (keycode == 53)
-	{
-		mlx_destroy_window(data->mlx_connection, data->mlx_win);
-		free(data->mlx_connection);
-		exit (0);
-	}
+		ft_esc(data);
 	else if (keycode == 126 || keycode == 13 ) //arriba
-	{	
-		if (data->map[data->y_npc - 1][data->x_npc] == 'C')
-			data->coins++;
-		else if (data->map[data->y_npc - 1][data->x_npc] == 'E')
-		{
-			mlx_destroy_window(data->mlx_connection, data->mlx_win);
-			free(data->mlx_connection);
-			exit (0);
-		}
-		else if (data->map[data->y_npc - 1][data->x_npc] != '0')
-			return (0);
-		movements++;
-		data->map[data->y_npc][data->x_npc] = '0';
-		data->y_npc -= 1; 
-		data->map[data->y_npc][data->x_npc] = 'P';
-		ft_make_map(data, data->map);
-	}
-	else if (keycode == 123) //izquierda
-	{
-		if (data->map[data->y_npc][data->x_npc - 1] == 'C')
-			data->coins++;
-		else if (data->map[data->y_npc][data->x_npc - 1] == 'E')
-		{	
-			mlx_destroy_window(data->mlx_connection, data->mlx_win);
-			free(data->mlx_connection);
-			exit (0);
-		}
-		else if (data->map[data->y_npc][data->x_npc - 1] != '0')
-			return (0);
-		movements++;
-		data->map[data->y_npc][data->x_npc] = '0';
-		data->x_npc -= 1; 
-		data->map[data->y_npc][data->x_npc] = 'P';
-		ft_make_map(data, data->map);
-	}
-	else if (keycode == 125) //abajo
-	{
-		if (data->map[data->y_npc + 1][data->x_npc] == 'C')
-			data->coins++;
-		else if (data->map[data->y_npc + 1][data->x_npc] == 'E')
-		{	
-			mlx_destroy_window(data->mlx_connection, data->mlx_win);
-			free(data->mlx_connection);
-			exit (0);
-		}
-		else if (data->map[data->y_npc + 1][data->x_npc] != '0')
-			return (0);
-		movements++;
-		data->map[data->y_npc][data->x_npc] = '0';
-		data->y_npc += 1; 
-		data->map[data->y_npc][data->x_npc] = 'P';
-		ft_make_map(data, data->map);
-	}
-	else if (keycode == 124) //derecha
-	{
-		if (data->map[data->y_npc][data->x_npc + 1] == 'C')
-			data->coins++;
-		else if (data->map[data->y_npc][data->x_npc + 1] == 'E')
-		{
-			mlx_destroy_window(data->mlx_connection, data->mlx_win);
-			free(data->mlx_connection);
-			exit (0);
-		}
-		else if (data->map[data->y_npc][data->x_npc + 1] != '0')
-			return (0);
-		movements++;
-		data->map[data->y_npc][data->x_npc] = '0';
-		data->x_npc += 1;  
-		data->map[data->y_npc][data->x_npc] = 'P';
-		ft_make_map(data, data->map);
-	}
+		movements += ft_up(data);
+	else if (keycode == 123 || keycode == 0) //izquierda
+		movements += ft_left(data);
+	else if (keycode == 125 || keycode == 1) //abajo
+		movements += ft_down(data);
+	else if (keycode == 124 || keycode == 2) //derecha
+		movements += ft_right(data);
+	ft_make_map(data, data->map);
 	return (0);
 }
+//feature: añadir la carga de imagenes nuevas en cada if en la dirección, sobran lineas 

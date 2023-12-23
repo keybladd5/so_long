@@ -13,15 +13,12 @@
 #ifndef SO_LONG_H
 # define SO_LONG_H
 # include "../minilibx_opengl_20191021/mlx.h"
+# include "../gnl/get_next_line.h"
+# include "../printf/includes/ft_printf.h"
 # include <stdlib.h>
 # include <fcntl.h>
 # include <libc.h>
 
-
-
-# define MALLOC_ERROR 1
-# define WIDTH 400
-# define HEIGHT 400
 
 typedef struct	s_data {
 	void	*mlx_connection;
@@ -44,8 +41,6 @@ typedef struct	s_data {
 }				t_data;
 
 
-char	*get_next_line(int fd);
-
 int 	ft_check_ext(char *argv[]);
 
 int		ft_check_matrix(t_data *data);
@@ -54,7 +49,7 @@ void	ft_flood_fill(t_data *data);
 
 void	ft_fill(t_data *data, int x, int y, int x_npc, int y_npc);
 
-void 	ft_get_npc_yx(t_data *data);
+void 	ft_get_npc_yx_coins(t_data *data);
 
 int		ft_get_doubles(t_data *data);
 
@@ -67,5 +62,16 @@ void	ft_map(char *argv[], t_data *data);
 void	ft_make_map(t_data *data, char** map);
 
 int		key_hook(int keycode, t_data *data);
+
+int		ft_up(t_data *data);
+
+int		ft_left(t_data *data);
+
+int		ft_down(t_data *data);
+
+int		ft_right(t_data *data);
+
+void 	ft_esc(t_data *data);
+
 
 #endif 

@@ -10,26 +10,34 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minilibx_opengl_20191021/mlx.h"
 #include "inc/so_long.h"
-#include "gnl/get_next_line.h"
 
 int main(int argc, char *argv[])
 {
 	t_data data;
 	if (argc != 2)
 		return (1);
+	if (ft_check_ext(argv) != 1)
+		return (1);
 	//ft_init_data(&data);
 	data.x_ = 0;
 	ft_map(argv, &data);
+	if (ft_check_matrix(&data) != 0)
+		return (1);
+	if (ft_get_doubles(&data) != 0)
+		return (1);
+	ft_get_npc_yx_coins(&data);
+	ft_flood_fill(&data);
+	if (data.flood_fill_check != 1)
+		return (1);
 	data.mlx_connection = mlx_init();//inicia la conexion con XWINDOW y hace malloc
 	if(!data.mlx_connection)
-		return (MALLOC_ERROR);
+		return (1);
 	data.mlx_win = mlx_new_window(data.mlx_connection, (data.x_ * 32), data.y_ * 32, "TEST");// abre la ventana y hace malloc
 	if (!data.mlx_win)
 	{
 		free(data.mlx_connection);
-		return (MALLOC_ERROR);
+		return (1);
 	}
 	data.img = mlx_xpm_file_to_image(data.mlx_connection, "assets/limit.xpm", &data.bits_per_pixel, &data.line_length); //carga imagen 1
 	data.img2 = mlx_xpm_file_to_image(data.mlx_connection, "assets/ground.xpm",&data.bits_per_pixel, &data.line_length); //carga imagen 2
