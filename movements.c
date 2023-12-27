@@ -12,10 +12,19 @@
 
 #include "inc/so_long.h"
 
-void ft_esc(t_data *data)
+int ft_esc(t_data *data)
 {
+	int i;
+
+	i = 0;
 	mlx_destroy_window(data->mlx_connection, data->mlx_win);
 	free(data->mlx_connection);
+	while (data->map[i])
+		{
+			free(data->map[i]);
+			i++;
+		}
+	free(data->map);
 	exit (0);
 }
 //FUNCIONA!!!!!!!!!!!!!!! TOMAR COMO REFERENCIA PARA EL CAMBIO CON LAS OTRAS

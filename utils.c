@@ -11,52 +11,7 @@
 /* ************************************************************************** */
 
 #include "inc/so_long.h"
-#include "gnl/get_next_line.h"
 
-//Checkea que la extension sea ber y nada mas
-int ft_check_ext(char *argv[])
-{
-	int i;
-	int size;
-
-	i = 0;
-	size = 0;
-	while(argv[1][size])
-		size++;
-	while(size - i != 3)
-		i++;
-	if (argv[1][i] == 'b' && argv[1][i + 1] == 'e' && argv[1][i + 2] == 'r' \
-		&& argv[1][i +3] == '\0')
-		return(1);
-	return (0);
-}
-int ft_get_doubles(t_data *data)
-{
-	int i;
-	int lines;
-	int e;
-	int p;
-
-	e = 0;
-	p = 0;
-	lines = 1;
-	while (lines < data->y_)
-	{
-		i = 0;
-		while (i < data->x_)
-		{
-			if (data->map[lines][i] == 'E')
-				e++;
-			else if (data->map[lines][i] == 'P')
-				p++;
-			i++;
-		}
-		lines++;
-	}
-	if (e > 1 || p > 1)
-		return (1);
-	return (0);
-}
 void ft_get_npc_yx_coins(t_data *data)
 {
 	int i;
@@ -80,71 +35,56 @@ void ft_get_npc_yx_coins(t_data *data)
 		lines++;
 	}
 }
-int	ft_check_matrix(t_data *data)
+//funcion para iniciar el stack de data
+void	ft_init_data(t_data *data)
+{
+	data->mlx_connection = NULL;
+	data->mlx_win = NULL;
+	data->img = NULL;
+	data->img2 = NULL;
+	data->img3 = NULL;
+	data->img4 = NULL;
+	data->img5 = NULL;
+	data->map = NULL;
+	data->y_npc = 0;
+	data->x_npc = 0;
+	data->y_ = 0;
+	data->x_ = 0;
+	data->coins = 0;
+	data->read_coins = 0;
+	data->flood_fill_check = 0;
+}
+//funcion para mandar por fd2 el mensaje de error y liberar memoria de pointers
+void ft_error(t_data *data)
 {
 	int i;
-	int line;
 
 	i = 0;
-	line = 0;
-	while (i < data->x_)
-	{
-		if (data->map[line][i] != '1')
-			return 1;
-		i++; 
+	if (data->mlx_win && data->mlx_connection)
+		mlx_destroy_window(data->mlx_connection, data->mlx_win);
+	if (data->map)
+	{	
+		while (data->map[i])
+		{
+			free(data->map[i]);
+			i++;
+		}
+		free(data->map);
 	}
-	while (line < data->y_)
-	{
-		if (data->map[line][0] != '1' && data->map[line][i] )
-			return 2;
-		line++; 
-	}
-	i = 0;
-	line--;
-	while (i < data->x_)
-	{
-		if (data->map[line][i] != '1')
-			return 3;
-		i++; 
-	}
-	return (0);
+	write(2, "Error\n", 7);
+	exit(1);
 }
 
 
-//TODO: Check if the way is aviable
-void	ft_fill(t_data *data, int x, int y, int x_npc, int y_npc)
+//funcion para hacer toda la bateria de pruebas de errores
+void ft_error_checker(t_data *data)
 {
-	if (y_npc < 0 || y_npc >= y || x_npc < 0 || x_npc >= x \
-		|| data->map[y_npc][x_npc] != '0' && data->map[y_npc][x_npc] != 'C' && data->map[y_npc][x_npc] != 'P' \
-		&& data->map[y_npc][x_npc] != 'E')	
-			return ;
-	if (data->map[y_npc][x_npc] == '0')
-		data->map[y_npc][x_npc] = 'o';
-	else if (data->map[y_npc][x_npc] == 'C')
-		data->map[y_npc][x_npc] = 'c';
-	else if (data->map[y_npc][x_npc] == 'P')
-		data->map[y_npc][x_npc] = 'p';
-	else if (data->map[y_npc][x_npc] == 'E')
-	{
-		data->flood_fill_check = 1;
-		printf("despues del check del floodfill %d\n", data->flood_fill_check);
-	}
-	ft_fill(data, x, y, x_npc - 1, y_npc);
-	ft_fill(data, x, y, x_npc + 1, y_npc);
-	ft_fill(data, x, y, x_npc, y_npc - 1);
-	ft_fill(data, x, y, x_npc, y_npc + 1);
-}
-
-void	ft_flood_fill(t_data *data)
-{
-	int size_x;
-	int size_y;
-	int npc_begin_x;
-	int npc_begin_y;
-
-	size_x = data->x_;
-	size_y = data->y_;
-	npc_begin_x = data->x_npc;
-	npc_begin_y = data->y_npc;
-	ft_fill(data, size_x, size_y, npc_begin_x, npc_begin_y);
+	if (ft_check_doubles(data) == 1)
+		ft_error(data);
+	if (ft_check_matrix(data) == 1)
+		ft_error(data);
+	ft_get_npc_yx_coins(data);
+	ft_flood_fill(data);
+	if (data->flood_fill_check != 1)
+		ft_error(data);
 }

@@ -11,7 +11,25 @@
 /* ************************************************************************** */
 
 #include "inc/so_long.h"
-#include "gnl/get_next_line.h"
+
+void	ft_load_images(t_data *data)
+{
+	int	w;
+	int	h;
+
+	w = 32;
+	h = 32;
+	data->img = mlx_xpm_file_to_image(data->mlx_connection, \
+		"assets/limit.xpm", &w, &h);
+	data->img2 = mlx_xpm_file_to_image(data->mlx_connection, \
+		"assets/ground.xpm", &w, &h); 
+	data->img3 = mlx_xpm_file_to_image(data->mlx_connection, \
+		"assets/test_coin.xpm", &w, &h); 
+	data->img4 = mlx_xpm_file_to_image(data->mlx_connection, \
+		"assets/npc.xpm", &w, &h); 
+	data->img5 = mlx_xpm_file_to_image(data->mlx_connection, \
+		"assets/exit.xpm", &w, &h);
+}
 
 void	ft_draw(t_data *data, int x, int y, int width, int height)
 {
@@ -36,7 +54,7 @@ void	ft_draw(t_data *data, int x, int y, int width, int height)
 			mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img5, width, height);
 	}
 }
-void ft_make_map(t_data *data, char** map)
+void ft_make_map(t_data *data)
 {
 	int y;
 	int x;
@@ -60,8 +78,6 @@ void ft_make_map(t_data *data, char** map)
 		y++;
 		height += 32;
 	}
-	for (int i = 0; i < data->y_; ++i)
-		printf("%s\n", data->map[i]);
 }
 //detecta el input del teclado, modifica la matriz y vuelve a llamar a la funcion para hacer el mapa
 int	key_hook(int keycode, t_data *data)
@@ -78,7 +94,15 @@ int	key_hook(int keycode, t_data *data)
 		movements += ft_down(data);
 	else if (keycode == 124 || keycode == 2) //derecha
 		movements += ft_right(data);
-	ft_make_map(data, data->map);
+	/*if (keycode == 126 || keycode == 13 )
+		data->img4 = mlx_xpm_file_to_image(data->mlx_connection, "assets/npc1.xpm",data->bits_per_pixel, data->line_length); 
+	else if (keycode == 123 || keycode == 0)
+		data->img4 = mlx_xpm_file_to_image(data->mlx_connection, "assets/npc2.xpm",data->bits_per_pixel, data->line_length);
+	else if (keycode == 125 || keycode == 1)
+		data->img4 = mlx_xpm_file_to_image(data->mlx_connection, "assets/npc3.xpm",data->bits_per_pixel, data->line_length);
+	else if (keycode == 124 || keycode == 2)
+		data->img4 = mlx_xpm_file_to_image(data->mlx_connection, "assets/npc4.xpm",data->bits_per_pixel, data->line_length);*/
+	ft_make_map(data);
 	return (0);
 }
 //feature: añadir la carga de imagenes nuevas en cada if en la dirección, sobran lineas 
