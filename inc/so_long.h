@@ -21,8 +21,8 @@
 
 
 typedef struct	s_data {
-	void	*mlx_connection;
-	void	*mlx_win;
+	void	*mlx_c;
+	void	*mlx_w;
 	void	*img;
 	void	*img2;
 	void	*img3;
@@ -35,6 +35,7 @@ typedef struct	s_data {
 	int		x_;
 	int 	coins;
 	int 	read_coins;
+	int		read_coins_flood;
 	int		flood_fill_check;
 }				t_data;
 

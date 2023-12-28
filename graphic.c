@@ -19,55 +19,58 @@ void	ft_load_images(t_data *data)
 
 	w = 32;
 	h = 32;
-	data->img = mlx_xpm_file_to_image(data->mlx_connection, \
+	data->img = mlx_xpm_file_to_image(data->mlx_c, \
 		"assets/limit.xpm", &w, &h);
-	data->img2 = mlx_xpm_file_to_image(data->mlx_connection, \
-		"assets/ground.xpm", &w, &h); 
-	data->img3 = mlx_xpm_file_to_image(data->mlx_connection, \
-		"assets/test_coin.xpm", &w, &h); 
-	data->img4 = mlx_xpm_file_to_image(data->mlx_connection, \
-		"assets/npc.xpm", &w, &h); 
-	data->img5 = mlx_xpm_file_to_image(data->mlx_connection, \
-		"assets/exit.xpm", &w, &h);
+	data->img2 = mlx_xpm_file_to_image(data->mlx_c, \
+	"assets/ground.xpm", &w, &h);
+	data->img3 = mlx_xpm_file_to_image(data->mlx_c, \
+	"assets/test_coin.xpm", &w, &h);
+	data->img4 = mlx_xpm_file_to_image(data->mlx_c, \
+	"assets/npc.xpm", &w, &h);
+	data->img5 = mlx_xpm_file_to_image(data->mlx_c, \
+	"assets/exit.xpm", &w, &h);
 }
 
-void	ft_draw(t_data *data, int x, int y, int width, int height)
+void	ft_draw(t_data *data, int x, int y, int w, int h)
 {
 	if (data->map[y][x] == '1')
-		mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img, width, height);
+		mlx_put_image_to_window(data->mlx_c, data->mlx_w, data->img, w, h);
 	else if (data->map[y][x] == 'o')
-		mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img2, width, height);
+		mlx_put_image_to_window(data->mlx_c, data->mlx_w, data->img2, w, h);
 	else if (data->map[y][x] == 'c')
 	{
-		mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img2, width, height);
-		mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img3, width, height);
+		mlx_put_image_to_window(data->mlx_c, data->mlx_w, data->img2, w, h);
+		mlx_put_image_to_window(data->mlx_c, data->mlx_w, data->img3, w, h);
 	}
 	else if (data->map[y][x] == 'p' || data->map[y][x] == 'e')
 	{
-		mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img2, width , height);
-		mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img4, width , height);
+		mlx_put_image_to_window(data->mlx_c, data->mlx_w, data->img2, w, h);
+		mlx_put_image_to_window(data->mlx_c, data->mlx_w, data->img4, w, h);
 	}
 	else if (data->map[y][x] == 'E')
 	{
-		mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img2, width, height);
+		mlx_put_image_to_window(data->mlx_c, data->mlx_w, data->img2, w, h);
 		if (data->coins == data->read_coins)
-			mlx_put_image_to_window(data->mlx_connection, data->mlx_win, data->img5, width, height);
+			mlx_put_image_to_window(data->mlx_c, data->mlx_w, data->img5, w, h);
 	}
 }
-void ft_make_map(t_data *data)
+
+void	ft_make_map(t_data *data)
 {
-	int y;
-	int x;
-	int width = 0;
-	int height = 0;
+	int	y;
+	int	x;
+	int	width;
+	int	height;
 
 	y = 0;
 	x = 0;
-	while(y < data->y_)
+	width = 0;
+	height = 0;
+	while (y < data->y_)
 	{
 		x = 0;
 		width = 0;
-		while(x < data->x_)
+		while (x < data->x_)
 		{
 			if (data->map[y][x] == '0')
 				data->map[y][x] = 'o';
@@ -79,30 +82,22 @@ void ft_make_map(t_data *data)
 		height += 32;
 	}
 }
-//detecta el input del teclado, modifica la matriz y vuelve a llamar a la funcion para hacer el mapa
+
 int	key_hook(int keycode, t_data *data)
 {
-	static int movements = 1;
-	printf("%d movements\n", movements); //cambiar por mi printf
+	static int	movements = 1;
+
+	ft_printf("%d movements\n", movements);
 	if (keycode == 53)
 		ft_esc(data);
-	else if (keycode == 126 || keycode == 13 ) //arriba
+	else if (keycode == 126 || keycode == 13)
 		movements += ft_up(data);
-	else if (keycode == 123 || keycode == 0) //izquierda
-		movements += ft_left(data);
-	else if (keycode == 125 || keycode == 1) //abajo
-		movements += ft_down(data);
-	else if (keycode == 124 || keycode == 2) //derecha
-		movements += ft_right(data);
-	/*if (keycode == 126 || keycode == 13 )
-		data->img4 = mlx_xpm_file_to_image(data->mlx_connection, "assets/npc1.xpm",data->bits_per_pixel, data->line_length); 
 	else if (keycode == 123 || keycode == 0)
-		data->img4 = mlx_xpm_file_to_image(data->mlx_connection, "assets/npc2.xpm",data->bits_per_pixel, data->line_length);
+		movements += ft_left(data);
 	else if (keycode == 125 || keycode == 1)
-		data->img4 = mlx_xpm_file_to_image(data->mlx_connection, "assets/npc3.xpm",data->bits_per_pixel, data->line_length);
+		movements += ft_down(data);
 	else if (keycode == 124 || keycode == 2)
-		data->img4 = mlx_xpm_file_to_image(data->mlx_connection, "assets/npc4.xpm",data->bits_per_pixel, data->line_length);*/
+		movements += ft_right(data);
 	ft_make_map(data);
 	return (0);
 }
-//feature: añadir la carga de imagenes nuevas en cada if en la dirección, sobran lineas 

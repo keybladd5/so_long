@@ -12,49 +12,48 @@
 
 #include "inc/so_long.h"
 
-//Obtiene el tamaño de la matriz leida en el .ber
-void ft_get_size_matrix(int fd, t_data *data)
+void	ft_get_size_matrix(int fd, t_data *data)
 {
-	char *line;
+	char	*line;
 
 	line = get_next_line(fd);
 	if (!line)
-		ft_error(data); //pendiente proteger
+		ft_error(data);
 	data->y_ = 1;
 	while (line[data->x_])
 		data->x_++;
-	while(line)
+	while (line)
 	{
-		free(line);
+		free (line);
 		line = get_next_line(fd);
 		if (!line)
-			return ; // aqui q hago? la forma de detectar el error es la misma que ya se usa para salir del bucle!! ❗️
+			return ;
 		data->y_++;
 	}
 }
-//Hace la matriz accediendo al tamaño
+
 void	ft_make_matrix(t_data *data, int fd)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	data->map = malloc(sizeof(char*) * data->y_ + 1);
-	if(!data->map)
+	data->map = malloc(sizeof(char *) * data->y_ + 1);
+	if (!data->map)
 		ft_error(data);
-	while(data->y_ - i)
+	while (data->y_ - i)
 	{
 		data->map[i] = get_next_line(fd);
-		if(!data->map[i])
+		if (!data->map[i])
 			ft_error(data);
 		i++;
 	}
 	data->map[i] = NULL;
 }
-//hace la matriz para la ventana
+
 void	ft_matrix(char *argv[], t_data *data)
 {
 	int	fd;
-	int h;
+	int	h;
 
 	h = 0;
 	fd = 0;
@@ -70,5 +69,4 @@ void	ft_matrix(char *argv[], t_data *data)
 		ft_error(data);
 	ft_make_matrix(data, fd);
 	close(fd);
-	
 }

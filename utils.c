@@ -12,10 +12,10 @@
 
 #include "inc/so_long.h"
 
-void ft_get_npc_yx_coins(t_data *data)
+void	ft_get_npc_yx_coins(t_data *data)
 {
-	int i;
-	int lines;
+	int	i;
+	int	lines;
 
 	lines = 1;
 	while (lines < data->y_)
@@ -28,18 +28,18 @@ void ft_get_npc_yx_coins(t_data *data)
 				data->x_npc = i;
 				data->y_npc = lines;
 			}
-			else if(data->map[lines][i] == 'C')
+			else if (data->map[lines][i] == 'C')
 				data->read_coins++;
 			i++;
 		}
 		lines++;
 	}
 }
-//funcion para iniciar el stack de data
+
 void	ft_init_data(t_data *data)
 {
-	data->mlx_connection = NULL;
-	data->mlx_win = NULL;
+	data->mlx_c = NULL;
+	data->mlx_w = NULL;
 	data->img = NULL;
 	data->img2 = NULL;
 	data->img3 = NULL;
@@ -52,18 +52,19 @@ void	ft_init_data(t_data *data)
 	data->x_ = 0;
 	data->coins = 0;
 	data->read_coins = 0;
+	data->read_coins_flood = 0;
 	data->flood_fill_check = 0;
 }
-//funcion para mandar por fd2 el mensaje de error y liberar memoria de pointers
-void ft_error(t_data *data)
+
+void	ft_error(t_data *data)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	if (data->mlx_win && data->mlx_connection)
-		mlx_destroy_window(data->mlx_connection, data->mlx_win);
+	if (data->mlx_w && data->mlx_c)
+		mlx_destroy_window(data->mlx_c, data->mlx_w);
 	if (data->map)
-	{	
+	{
 		while (data->map[i])
 		{
 			free(data->map[i]);
@@ -75,15 +76,15 @@ void ft_error(t_data *data)
 	exit(1);
 }
 
-
-//funcion para hacer toda la bateria de pruebas de errores
-void ft_error_checker(t_data *data)
+void	ft_error_checker(t_data *data)
 {
 	if (ft_check_doubles(data) == 1)
 		ft_error(data);
 	if (ft_check_matrix(data) == 1)
 		ft_error(data);
 	ft_get_npc_yx_coins(data);
+	if (data->read_coins == 0)
+		ft_error(data);
 	ft_flood_fill(data);
 	if (data->flood_fill_check != 1)
 		ft_error(data);

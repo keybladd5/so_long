@@ -12,11 +12,10 @@
 
 #include "inc/so_long.h"
 
-//Checkea que la extension sea ber y nada mas
 int ft_check_ext(char *argv[])
 {
-	int i;
-	int size;
+	int	i;
+	int	size;
 
 	i = 0;
 	size = 0;
@@ -24,7 +23,7 @@ int ft_check_ext(char *argv[])
 		size++;
 	while(size - i != 3)
 		i++;
-	if (argv[1][i] == 'b' && argv[1][i + 1] == 'e' && argv[1][i + 2] == 'r' \
+	if (argv[1][i] == 'b' && argv[1][i + 1] == 'e' && argv[1][i + 2] == 'r'\
 		&& argv[1][i +3] == '\0')
 		return(0);
 	return (1);
@@ -89,21 +88,23 @@ int	ft_check_matrix(t_data *data)
 
 void	ft_fill(t_data *data, int x, int y, int x_npc, int y_npc)
 {
-	if ((y_npc < 0 || y_npc >= y || x_npc < 0 || x_npc >= x || data->map[y_npc][x_npc] != '0')\
-	 && (data->map[y_npc][x_npc] != 'C' && data->map[y_npc][x_npc] != 'P'\
-	  && data->map[y_npc][x_npc] != 'E'))	
+	if ((y_npc < 0 || y_npc >= y || x_npc < 0 || x_npc >= x \
+	|| data->map[y_npc][x_npc] != '0')\
+	&& (data->map[y_npc][x_npc] != 'C' && data->map[y_npc][x_npc] != 'P'\
+	 && data->map[y_npc][x_npc] != 'E'))	
 			return ;
 	if (data->map[y_npc][x_npc] == '0')
 		data->map[y_npc][x_npc] = 'o';
 	else if (data->map[y_npc][x_npc] == 'C')
+	{
 		data->map[y_npc][x_npc] = 'c';
+		if (data->read_coins > data->read_coins_flood)
+			data->read_coins_flood++;
+	}
 	else if (data->map[y_npc][x_npc] == 'P')
 		data->map[y_npc][x_npc] = 'p';
 	else if (data->map[y_npc][x_npc] == 'E')
-	{
 		data->flood_fill_check = 1;
-		printf("despues del check del floodfill %d\n", data->flood_fill_check);
-	}
 	ft_fill(data, x, y, x_npc - 1, y_npc);
 	ft_fill(data, x, y, x_npc + 1, y_npc);
 	ft_fill(data, x, y, x_npc, y_npc - 1);
@@ -122,4 +123,6 @@ void	ft_flood_fill(t_data *data)
 	npc_begin_x = data->x_npc;
 	npc_begin_y = data->y_npc;
 	ft_fill(data, size_x, size_y, npc_begin_x, npc_begin_y);
+	if (data->read_coins != data->read_coins_flood)
+		ft_error(data);
 }
