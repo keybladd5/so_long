@@ -19,8 +19,8 @@
 # include <fcntl.h>
 # include <libc.h>
 
-
-typedef struct	s_data {
+typedef struct s_data
+{
 	void	*mlx_c;
 	void	*mlx_w;
 	void	*img;
@@ -28,31 +28,33 @@ typedef struct	s_data {
 	void	*img3;
 	void	*img4;
 	void	*img5;
-	char 	**map;
-	int 	y_npc;
+	void	*img6;
+	char	**map;
+	int		y_npc;
 	int		x_npc;
-	int 	y_;
+	int		y_;
 	int		x_;
-	int 	coins;
-	int 	read_coins;
+	int		y;
+	int		x;
+	int		coins;
+	int		read_coins;
 	int		read_coins_flood;
 	int		flood_fill_check;
 }				t_data;
 
-
-int 	ft_check_ext(char *argv[]);
+int		ft_check_ext(char *argv[]);
 
 int		ft_check_matrix(t_data *data);
 
 void	ft_flood_fill(t_data *data);
 
-void	ft_fill(t_data *data, int x, int y, int x_npc, int y_npc);
+void	ft_fill(t_data *data, int x_npc, int y_npc);
 
-void 	ft_get_npc_yx_coins(t_data *data);
+void	ft_get_npc_yx_coins(t_data *data);
 
 int		ft_check_doubles(t_data *data);
 
-void 	ft_get_size_matrix(int fd, t_data *data);
+void	ft_get_size_matrix(int fd, t_data *data);
 
 void	ft_make_matrix(t_data *data, int fd);
 
@@ -72,12 +74,16 @@ int		ft_down(t_data *data);
 
 int		ft_right(t_data *data);
 
-int 	ft_esc(t_data *data);
+int		ft_esc(t_data *data);
 
-void 	ft_error(t_data *data);
+void	ft_error(t_data *data);
 
-void 	ft_error_checker(t_data *data);
+void	ft_error_checker(t_data *data);
 
 void	ft_init_data(t_data *data);
+
+void	ft_instructions(void);
+
+void	ft_endgame(void);
 
 #endif 

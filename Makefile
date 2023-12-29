@@ -14,8 +14,8 @@
 NAME = So_long
 
 SRCS =  gnl/get_next_line.c gnl/get_next_line_utils.c printf/ft_printf.c \
-		printf/ft_printf_utils.c errors_check.c graphic.c matrix.c movements.c\
-		utils.c main.c
+		printf/ft_printf_utils.c src/errors_check.c src/graphic.c src/matrix.c src/movements.c\
+		src/utils.c src/main.c
 
 INCLUDES = inc/so_long.h
 

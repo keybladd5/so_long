@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "inc/so_long.h"
+#include "../inc/so_long.h"
 
 void	ft_get_npc_yx_coins(t_data *data)
 {
@@ -45,11 +45,14 @@ void	ft_init_data(t_data *data)
 	data->img3 = NULL;
 	data->img4 = NULL;
 	data->img5 = NULL;
+	data->img6 = NULL;
 	data->map = NULL;
 	data->y_npc = 0;
 	data->x_npc = 0;
 	data->y_ = 0;
 	data->x_ = 0;
+	data->y = 0;
+	data->x = 0;
 	data->coins = 0;
 	data->read_coins = 0;
 	data->read_coins_flood = 0;
@@ -61,8 +64,6 @@ void	ft_error(t_data *data)
 	int	i;
 
 	i = 0;
-	if (data->mlx_w && data->mlx_c)
-		mlx_destroy_window(data->mlx_c, data->mlx_w);
 	if (data->map)
 	{
 		while (data->map[i])

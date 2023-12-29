@@ -10,7 +10,26 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "inc/so_long.h"
+#include "../inc/so_long.h"
+
+void	ft_instructions(void)
+{
+	ft_printf("\n  🃏Hellow! Welcome to the So_long project by @polmarti🃏\n");
+	ft_printf("------------------------------------------------------------\n");
+	ft_printf("			Press W or ↑ to go UP!\n");
+	ft_printf("			Press S or ↓ to go UP!\n");
+	ft_printf("			Press A or ← to go UP!\n");
+	ft_printf("			Press D or → to go UP!\n");
+	ft_printf("------------------------------------------------------------\n");
+	ft_printf("	 Collect all the flags to WIN the game!\n");
+	ft_printf("\n			Good LUCK 🏖\n\n");
+	ft_printf("↓MOVEMENTS↓\n");
+}
+
+void	ft_endgame(void)
+{
+	ft_printf("			🏖 YOU WIN 🏖\n");
+}
 
 int	main(int argc, char *argv[])
 {
@@ -33,6 +52,7 @@ int	main(int argc, char *argv[])
 	}
 	ft_load_images(&data);
 	ft_make_map(&data);
+	ft_instructions();
 	mlx_key_hook(data.mlx_w, key_hook, &data);
 	mlx_hook(data.mlx_w, 17, 0, &ft_esc, &data);
 	mlx_loop(data.mlx_c);

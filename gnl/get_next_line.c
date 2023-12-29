@@ -58,7 +58,7 @@ char	*ft_fill_line(char *store)
 	rtrn = ft_strchr(store, '\n');
 	if (!rtrn)
 		rtrn = ft_strchr(store, '\0');
-	s = ft_substr(store, 0, ((rtrn - store))); //MODIFICADO PARA QUE NO PILLE EL BARAR /N
+	s = ft_substr(store, 0, ((rtrn - store)));
 	if (!s)
 		return (NULL);
 	return (s);

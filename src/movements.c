@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "inc/so_long.h"
+#include "../inc/so_long.h"
 
 int	ft_esc(t_data *data)
 {
@@ -25,6 +25,8 @@ int	ft_esc(t_data *data)
 		i++;
 	}
 	free(data->map);
+	if (data->coins == data->read_coins)
+		ft_endgame();
 	exit (0);
 }
 
