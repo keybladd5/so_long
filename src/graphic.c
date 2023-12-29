@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   graphic.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: polmarti <polmarti@student.42barcel>       +#+  +:+       +#+        */
+/*   By: Meritxu <Meritxu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 18:14:05 by polmarti          #+#    #+#             */
-/*   Updated: 2023/12/21 18:14:08 by polmarti         ###   ########.fr       */
+/*   Updated: 2023/12/29 23:49:48 by Meritxu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,11 +96,19 @@ int	key_hook(int keycode, t_data *data)
 	else if (keycode == 126 || keycode == 13)
 		movements += ft_up(data);
 	else if (keycode == 123 || keycode == 0)
+	{
+		data->img4 = mlx_xpm_file_to_image(data->mlx_c, \
+		"assets/lapras_l.xpm", &data->x, &data->y);
 		movements += ft_left(data);
+	}
 	else if (keycode == 125 || keycode == 1)
 		movements += ft_down(data);
 	else if (keycode == 124 || keycode == 2)
+	{
+		data->img4 = mlx_xpm_file_to_image(data->mlx_c, \
+		"assets/lapras_r.xpm", &data->x, &data->y);
 		movements += ft_right(data);
+	}
 	ft_make_map(data);
 	if (tmp != movements)
 		ft_printf("%d movements\n", movements);

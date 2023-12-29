@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: polmarti <polmarti@student.42barcel>       +#+  +:+       +#+        */
+/*   By: Meritxu <Meritxu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/19 11:56:28 by polmarti          #+#    #+#             */
-/*   Updated: 2023/12/19 11:56:31 by polmarti         ###   ########.fr       */
+/*   Updated: 2023/12/29 23:43:23 by Meritxu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@ void	ft_instructions(void)
 	ft_printf("\n  🃏Hellow! Welcome to the So_long project by @polmarti🃏\n");
 	ft_printf("------------------------------------------------------------\n");
 	ft_printf("			Press W or ↑ to go UP!\n");
-	ft_printf("			Press S or ↓ to go UP!\n");
-	ft_printf("			Press A or ← to go UP!\n");
-	ft_printf("			Press D or → to go UP!\n");
+	ft_printf("			Press S or ↓ to go DOWN!\n");
+	ft_printf("			Press A or ← to go LEFT!\n");
+	ft_printf("			Press D or → to go RIGHT!\n");
 	ft_printf("------------------------------------------------------------\n");
 	ft_printf("	 Collect all the flags to WIN the game!\n");
 	ft_printf("\n			Good LUCK 🏖\n\n");

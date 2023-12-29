@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   matrix.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: polmarti <polmarti@student.42barcel>       +#+  +:+       +#+        */
+/*   By: Meritxu <Meritxu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/19 11:48:40 by polmarti          #+#    #+#             */
-/*   Updated: 2023/12/19 11:48:43 by polmarti         ###   ########.fr       */
+/*   Updated: 2023/12/29 23:36:25 by Meritxu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,7 @@ void	ft_make_matrix(t_data *data, int fd)
 void	ft_matrix(char *argv[], t_data *data)
 {
 	int	fd;
-	int	h;
 
-	h = 0;
 	fd = 0;
 	if (ft_check_ext(argv) == 1)
 		ft_error(data);
